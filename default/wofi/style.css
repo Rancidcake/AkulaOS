@@ -1,0 +1,52 @@
+/*
+ * AkulaOS wofi — CONSTRUCTIVIST MINIMAL
+ * Ink background, paper text, red accent on selection, hairline border.
+ */
+
+* {
+    font-family:   Inter, sans-serif;
+    font-size:     14px;
+    border-radius: 0;
+}
+
+window {
+    background-color: #1A1A1A;
+    border:           1px solid #4A4A4A;
+}
+
+#input {
+    background-color: #1A1A1A;
+    color:            #E8E2D0;
+    border:           none;
+    border-bottom:    1px solid #4A4A4A;
+    padding:          8px 16px;
+    outline:          none;
+    caret-color:      #C41E1E;
+}
+
+#input:focus {
+    border-bottom: 1px solid #C41E1E;
+}
+
+#outer-box {
+    padding: 0;
+}
+
+#scroll {
+    padding: 8px 0;
+}
+
+#entry {
+    padding: 8px 16px;
+    color:   #8A8A82;
+}
+
+#entry:selected {
+    background-color: #2B2D33;
+    color:            #E8E2D0;
+    border-left:      3px solid #C41E1E;
+}
+
+#text {
+    color: inherit;
+}

@@ -1,0 +1,12 @@
+# AkulaOS — wofi launcher config
+
+show=drun
+width=480
+height=400
+lines=12
+prompt=
+allow_markup=false
+allow_images=false
+insensitive=true
+no_actions=true
+hide_scroll=true

@@ -51,3 +51,26 @@ MOZ_ENABLE_WAYLAND=1
 EOF
 
 ok "System environment set"
+
+# ── Dotfile deployment ────────────────────────────────────────────────────────
+
+info "Deploying default configs"
+
+_AKULA_DIR="${AKULA_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
+_DEF="$_AKULA_DIR/default"
+
+# Sway config goes system-wide so the /etc/sway/config.d/ include path works
+sudo mkdir -p /etc/sway/config.d
+sudo install -m 644 "$_DEF/sway/config" /etc/sway/config
+
+# Per-user configs
+install -Dm 644 "$_DEF/waybar/config.jsonc"      "$HOME/.config/waybar/config.jsonc"
+install -Dm 644 "$_DEF/waybar/style.css"          "$HOME/.config/waybar/style.css"
+install -Dm 644 "$_DEF/mako/config"               "$HOME/.config/mako/config"
+install -Dm 644 "$_DEF/foot/foot.ini"             "$HOME/.config/foot/foot.ini"
+install -Dm 644 "$_DEF/wofi/config"               "$HOME/.config/wofi/config"
+install -Dm 644 "$_DEF/wofi/style.css"            "$HOME/.config/wofi/style.css"
+install -Dm 644 "$_DEF/starship/starship.toml"    "$HOME/.config/starship.toml"
+install -Dm 644 "$_DEF/akula/palette.sh"          "$HOME/.config/akula/palette.sh"
+
+ok "Configs deployed"

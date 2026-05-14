@@ -1,0 +1,101 @@
+/*
+ * AkulaOS waybar — CONSTRUCTIVIST MINIMAL
+ * Palette: paper #E8E2D0  ink #1A1A1A  steel #2B2D33
+ *          red #C41E1E    rule #4A4A4A  mute #8A8A82
+ */
+
+* {
+    font-family: Inter, sans-serif;
+    font-size:   13px;
+    min-height:  0;
+    border:      none;
+    border-radius: 0;
+    padding:     0;
+    margin:      0;
+}
+
+window#waybar {
+    background:    #2B2D33;
+    color:         #E8E2D0;
+    border-bottom: 1px solid #4A4A4A;
+}
+
+/* ── Workspaces ────────────────────────────────────────────────────────────── */
+
+#workspaces button {
+    padding:       0 8px;
+    color:         #8A8A82;
+    background:    transparent;
+    border-bottom: 3px solid transparent;
+}
+
+#workspaces button.focused {
+    color:         #E8E2D0;
+    border-bottom: 3px solid #C41E1E;
+}
+
+#workspaces button.urgent {
+    color:      #E8E2D0;
+    background: #C41E1E;
+}
+
+#workspaces button:hover {
+    color:         #E8E2D0;
+    background:    #1A1A1A;
+    border-bottom: 3px solid #4A4A4A;
+}
+
+/* ── Mode indicator ────────────────────────────────────────────────────────── */
+
+#mode {
+    padding:    0 8px;
+    color:      #E8E2D0;
+    background: #C41E1E;
+}
+
+/* ── Clock (center) ────────────────────────────────────────────────────────── */
+
+#clock {
+    padding:     0 16px;
+    color:       #E8E2D0;
+    font-weight: 500;
+}
+
+/* ── Right modules — shared base ───────────────────────────────────────────── */
+
+#cpu,
+#memory,
+#network,
+#pulseaudio,
+#battery,
+#tray {
+    padding:     0 8px;
+    color:       #8A8A82;
+    border-left: 1px solid #4A4A4A;
+}
+
+#cpu:hover,
+#memory:hover,
+#network:hover,
+#pulseaudio:hover {
+    color: #E8E2D0;
+}
+
+/* ── Module-specific states ────────────────────────────────────────────────── */
+
+#network.disconnected {
+    color: #C41E1E;
+}
+
+#pulseaudio.muted {
+    color: #C41E1E;
+}
+
+#battery.warning {
+    color: #E8E2D0;
+}
+
+#battery.critical {
+    color:      #E8E2D0;
+    background: #C41E1E;
+}

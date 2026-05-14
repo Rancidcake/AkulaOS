@@ -1,0 +1,185 @@
+# AkulaOS — Sway configuration
+# Constructivist Minimal: steel panels, cream text, red accent, 1px hairline borders.
+
+# ── Variables ─────────────────────────────────────────────────────────────────
+
+set $mod    Mod4
+set $left   h
+set $down   j
+set $up     k
+set $right  l
+
+set $term   foot
+set $menu   wofi --show drun --allow-markup
+
+# Palette (mirrored from default/akula/palette.sh for sway's variable system)
+set $paper  #E8E2D0
+set $ink    #1A1A1A
+set $steel  #2B2D33
+set $shadow #0D0D0F
+set $red    #C41E1E
+set $rule   #4A4A4A
+set $mute   #8A8A82
+
+# ── Output ────────────────────────────────────────────────────────────────────
+
+# Solid ink background — wallpaper replaced by akula-screensaver in M4
+output * bg $ink solid_color
+
+# ── Input ─────────────────────────────────────────────────────────────────────
+
+input type:touchpad {
+    tap            enabled
+    natural_scroll enabled
+    dwt            enabled
+}
+
+input type:keyboard {
+    xkb_options caps:escape
+}
+
+# ── Appearance ────────────────────────────────────────────────────────────────
+
+font pango:Inter 10
+
+default_border          pixel 1
+default_floating_border pixel 1
+hide_edge_borders       smart
+
+gaps inner 8
+smart_gaps on
+
+#                       border  bg      text    indicator  child
+client.focused          $red    $steel  $paper  $red       $red
+client.unfocused        $rule   $ink    $mute   $rule      $rule
+client.focused_inactive $rule   $steel  $mute   $rule      $rule
+client.urgent           $red    $red    $paper  $red       $red
+
+# ── Autostart ─────────────────────────────────────────────────────────────────
+
+exec waybar
+exec mako
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
+
+exec swayidle -w \
+    timeout 300  'swaylock -f -c 0D0D0F' \
+    timeout 600  'swaymsg "output * dpms off"' \
+    resume       'swaymsg "output * dpms on"' \
+    before-sleep 'swaylock -f -c 0D0D0F'
+
+# GTK appearance — applied each login so gsettings stay in sync with configs
+exec gsettings set org.gnome.desktop.interface font-name          "Inter 10"
+exec gsettings set org.gnome.desktop.interface monospace-font-name "JetBrains Mono 11"
+exec gsettings set org.gnome.desktop.interface icon-theme         "Yaru"
+exec gsettings set org.gnome.desktop.interface gtk-theme          "Adwaita"
+exec gsettings set org.gnome.desktop.interface cursor-theme       "Adwaita"
+
+# ── Key bindings — core ───────────────────────────────────────────────────────
+
+bindsym $mod+Return       exec $term
+bindsym $mod+d            exec $menu
+bindsym $mod+Shift+q      kill
+bindsym $mod+Shift+c      reload
+bindsym $mod+Shift+e      exec swaymsg exit
+
+# ── Key bindings — focus ──────────────────────────────────────────────────────
+
+bindsym $mod+$left        focus left
+bindsym $mod+$down        focus down
+bindsym $mod+$up          focus up
+bindsym $mod+$right       focus right
+bindsym $mod+Left         focus left
+bindsym $mod+Down         focus down
+bindsym $mod+Up           focus up
+bindsym $mod+Right        focus right
+
+# ── Key bindings — move ───────────────────────────────────────────────────────
+
+bindsym $mod+Shift+$left  move left
+bindsym $mod+Shift+$down  move down
+bindsym $mod+Shift+$up    move up
+bindsym $mod+Shift+$right move right
+bindsym $mod+Shift+Left   move left
+bindsym $mod+Shift+Down   move down
+bindsym $mod+Shift+Up     move up
+bindsym $mod+Shift+Right  move right
+
+# ── Key bindings — layout ─────────────────────────────────────────────────────
+
+bindsym $mod+b            splith
+bindsym $mod+v            splitv
+bindsym $mod+s            layout stacking
+bindsym $mod+w            layout tabbed
+bindsym $mod+e            layout toggle split
+bindsym $mod+f            fullscreen
+bindsym $mod+Shift+Space  floating toggle
+bindsym $mod+Space        focus mode_toggle
+bindsym $mod+a            focus parent
+
+# ── Key bindings — workspaces ─────────────────────────────────────────────────
+
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
+
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+
+# ── Key bindings — screenshots ────────────────────────────────────────────────
+
+bindsym Print      exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
+bindsym $mod+Print exec grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
+
+# ── Key bindings — media and hardware ────────────────────────────────────────
+
+bindsym XF86AudioRaiseVolume  exec pamixer -i 5
+bindsym XF86AudioLowerVolume  exec pamixer -d 5
+bindsym XF86AudioMute         exec pamixer -t
+bindsym XF86AudioPlay         exec playerctl play-pause
+bindsym XF86AudioNext         exec playerctl next
+bindsym XF86AudioPrev         exec playerctl previous
+bindsym XF86MonBrightnessUp   exec brightnessctl set +10%
+bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
+
+# ── Key bindings — scratchpad ─────────────────────────────────────────────────
+
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus       scratchpad show
+
+# ── Resize mode ───────────────────────────────────────────────────────────────
+
+mode "resize" {
+    bindsym $left  resize shrink width  10px
+    bindsym $down  resize grow   height 10px
+    bindsym $up    resize shrink height 10px
+    bindsym $right resize grow   width  10px
+    bindsym Left   resize shrink width  10px
+    bindsym Down   resize grow   height 10px
+    bindsym Up     resize shrink height 10px
+    bindsym Right  resize grow   width  10px
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# ── Drop-in overrides ─────────────────────────────────────────────────────────
+
+include /etc/sway/config.d/*

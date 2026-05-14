@@ -1,0 +1,45 @@
+# AkulaOS — starship prompt
+# Minimal: directory, git branch, git status, prompt character. Nothing else.
+
+format = "$directory$git_branch$git_status$character"
+
+add_newline = false
+
+[character]
+success_symbol = "[❯](#C41E1E bold)"
+error_symbol   = "[❯](#C41E1E bold)"
+
+[directory]
+style             = "#E8E2D0 bold"
+truncation_length = 3
+truncate_to_repo  = true
+
+[git_branch]
+symbol = ""
+style  = "#8A8A82"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style  = "#C41E1E"
+format = "([$all_status$ahead_behind]($style) )"
+
+[cmd_duration]
+disabled = true
+
+[username]
+disabled = true
+
+[hostname]
+disabled = true
+
+[package]
+disabled = true
+
+[nodejs]
+disabled = true
+
+[python]
+disabled = true
+
+[rust]
+disabled = true

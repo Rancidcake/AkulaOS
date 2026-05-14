@@ -1,0 +1,27 @@
+# AkulaOS — mako notification config
+
+sort=-time
+layer=overlay
+anchor=top-right
+
+background-color=#2B2D33
+text-color=#E8E2D0
+border-color=#4A4A4A
+border-size=1
+border-radius=0
+
+width=320
+height=120
+margin=8
+padding=8
+
+font=Inter 12
+icons=0
+max-visible=5
+default-timeout=6000
+
+[urgency=high]
+background-color=#C41E1E
+text-color=#E8E2D0
+border-color=#C41E1E
+default-timeout=0
