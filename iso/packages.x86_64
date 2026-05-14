@@ -2,8 +2,8 @@
 # These packages are installed into the squashfs live filesystem.
 # The installer (install.sh) installs its own package set onto the target disk.
 
-# archiso live-boot hooks — required for squashfs root to work
-archiso
+# mkinitcpio hook scripts that find+mount the squashfs root at live-boot time
+mkinitcpio-archiso
 
 # BIOS boot support
 syslinux
