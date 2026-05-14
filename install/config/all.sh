@@ -72,5 +72,20 @@ install -Dm 644 "$_DEF/wofi/config"               "$HOME/.config/wofi/config"
 install -Dm 644 "$_DEF/wofi/style.css"            "$HOME/.config/wofi/style.css"
 install -Dm 644 "$_DEF/starship/starship.toml"    "$HOME/.config/starship.toml"
 install -Dm 644 "$_DEF/akula/palette.sh"          "$HOME/.config/akula/palette.sh"
+install -Dm 644 "$_DEF/swaylock/config"           "$HOME/.config/swaylock/config"
 
 ok "Configs deployed"
+
+# ── bin/ scripts → ~/.local/bin ───────────────────────────────────────────────
+
+info "Installing akula-* binaries"
+
+mkdir -p "$HOME/.local/bin"
+install -Dm 755 "$_AKULA_DIR/bin/"akula-* "$HOME/.local/bin/"
+
+# Add ~/.local/bin to PATH if not already present
+if ! grep -q '\.local/bin' "$HOME/.bash_profile" 2>/dev/null; then
+    printf '\nexport PATH="$HOME/.local/bin:$PATH"\n' >> "$HOME/.bash_profile"
+fi
+
+ok "Binaries installed to ~/.local/bin"

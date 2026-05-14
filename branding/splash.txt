@@ -1,0 +1,11 @@
+════════════════════════════════════════════
+
+  А К У Л А  О С  ·  Install complete.
+
+  Reboot to start your session.
+
+  Super+Enter   open terminal
+  Super+D       open launcher
+  Super+Shift+E exit Sway
+
+════════════════════════════════════════════

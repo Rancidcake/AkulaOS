@@ -1,0 +1,37 @@
+# AkulaOS — swaylock config
+# void background, red ring, paper text.
+
+color=0D0D0F
+
+font=Bebas Neue
+font-size=36
+
+indicator-idle-visible
+ignore-empty-password
+
+# Indicator ring
+ring-color=C41E1E
+ring-ver-color=8A8A82
+ring-wrong-color=8B2914
+
+# Indicator fill
+inside-color=0D0D0F
+inside-ver-color=0D0D0F
+inside-wrong-color=0D0D0F
+
+# Text on indicator
+text-color=E8E2D0
+text-ver-color=8A8A82
+text-wrong-color=E8E2D0
+
+# Key highlight on ring
+key-hl-color=E8E2D0
+bs-hl-color=C41E1E
+
+# Line between fill and ring
+line-color=4A4A4A
+line-ver-color=4A4A4A
+line-wrong-color=C41E1E
+
+# Separator between outer ring and line
+separator-color=00000000

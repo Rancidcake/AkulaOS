@@ -1,0 +1,32 @@
+#!/bin/bash
+# Generates the AkulaOS wallpaper if missing, then sets it in the running Sway session.
+# Design: ink field, hairline thirds grid, single red rule at vertical center.
+# Requires: imagemagick (convert)
+
+set -euo pipefail
+
+source "${XDG_CONFIG_HOME:-$HOME/.config}/akula/palette.sh" 2>/dev/null || {
+    AKULA_INK="#1A1A1A"
+    AKULA_RULE="#4A4A4A"
+    AKULA_RED="#C41E1E"
+}
+
+out="${XDG_DATA_HOME:-$HOME/.local/share}/akula/wallpaper.png"
+mkdir -p "$(dirname "$out")"
+
+if [[ ! -f "$out" ]]; then
+    convert \
+        -size 1920x1080 "xc:${AKULA_INK}" \
+        -stroke "${AKULA_RULE}" -strokewidth 1 \
+        -draw "line 0,360 1920,360" \
+        -draw "line 0,720 1920,720" \
+        -draw "line 640,0 640,1080" \
+        -draw "line 1280,0 1280,1080" \
+        -stroke "${AKULA_RED}" -strokewidth 3 \
+        -draw "line 0,540 1920,540" \
+        "$out"
+fi
+
+if command -v swaymsg &>/dev/null && [[ -n "${SWAYSOCK:-}" ]]; then
+    swaymsg "output '*' bg $out fill" 2>/dev/null || true
+fi

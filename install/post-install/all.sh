@@ -70,7 +70,14 @@ printf 'installed=%s\nversion=0.1.0\n' "$(date --iso-8601=seconds)" \
 
 ok "Install flag written"
 
+# ── Wallpaper ─────────────────────────────────────────────────────────────────
+
+info "Generating wallpaper"
+_bin="${AKULA_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}/bin"
+"$_bin/akula-wallpaper"
+ok "Wallpaper generated"
+
 # ── Done ──────────────────────────────────────────────────────────────────────
 
-fastfetch
-printf '\nAkulaOS install complete. Reboot to start your Sway session.\n'
+"$_bin/akula-logo"
+cat "${AKULA_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}/branding/splash.txt"

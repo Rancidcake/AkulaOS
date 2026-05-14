@@ -1,0 +1,6 @@
+#!/bin/bash
+# About screen: logo followed by fastfetch system info.
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"$SCRIPT_DIR/akula-logo"
+fastfetch

@@ -1,0 +1,31 @@
+#!/bin/bash
+# Prints the AkulaOS logo with palette colors.
+
+source "${XDG_CONFIG_HOME:-$HOME/.config}/akula/palette.sh" 2>/dev/null || true
+
+_fg() {
+    local hex="${1#'#'}"
+    printf '\e[38;2;%d;%d;%dm' \
+        "$(( 16#${hex:0:2} ))" \
+        "$(( 16#${hex:2:2} ))" \
+        "$(( 16#${hex:4:2} ))"
+}
+_bold()  { printf '\e[1m'; }
+_reset() { printf '\e[0m'; }
+
+RULE="${AKULA_RULE:-#4A4A4A}"
+PAPER="${AKULA_PAPER:-#E8E2D0}"
+RED="${AKULA_RED:-#C41E1E}"
+MUTE="${AKULA_MUTE:-#8A8A82}"
+
+printf '\n'
+_fg "$RULE";  printf '════════════════════════════════════════════\n'; _reset
+printf '\n'
+_bold; _fg "$PAPER"; printf '  А К У Л А '; _reset
+_bold; _fg "$RED";   printf 'О С\n'; _reset
+printf '\n'
+_fg "$MUTE";  printf '  Fast. Stable. Visible.\n'
+              printf '  Arch Linux  ·  Sway  ·  Wayland\n'; _reset
+printf '\n'
+_fg "$RULE";  printf '════════════════════════════════════════════\n'; _reset
+printf '\n'
