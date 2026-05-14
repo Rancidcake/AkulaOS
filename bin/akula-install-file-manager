@@ -1,0 +1,16 @@
+#!/bin/bash
+# Install Thunar as an optional file manager.
+# Not in core — eza, fd, and fzf cover most CLI file navigation.
+# Thunar adds ~20 MB idle RAM and pulls in some XFCE dependencies.
+
+set -euo pipefail
+
+echo "Installing Thunar (~20 MB idle)..."
+sudo pacman -S --needed --noconfirm thunar
+
+xdg-mime default thunar.desktop inode/directory
+
+echo ""
+echo "Thunar installed and set as default file manager."
+echo "Launch with: thunar"
+echo "Open current directory: thunar ."

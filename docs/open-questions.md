@@ -1,102 +1,84 @@
 # AkulaOS — Open Questions
 
-Items logged here are genuine ambiguities that need a decision before the relevant milestone.
-Pick the most conservative available option when blocked, then log it here.
+All questions from the initial planning phase have been resolved.
+New ambiguities go here as they arise.
 
 ---
 
-## OQ-001: Swap / zram configuration
+## OQ-001: Swap / zram configuration — RESOLVED (M7)
 
-**Question:** Should AkulaOS enable zram (compressed swap in RAM) by default on 4 GB machines?
+**Question:** Should AkulaOS enable zram by default on 4 GB machines?
 
-**Why it matters:** With Firefox running (350-500 MB), the system approaches the 800 MB
-idle budget. Heavy tab use will push into swap. Without any swap, the OOM killer fires.
-With zram, compressed memory acts as a buffer.
-
-**Conservative pick if needed:** Install `zram-generator` from pacman, enable a single
-zram device at 50% of RAM (2 GB compressed). This is what Fedora does by default.
-
-**Milestone:** Relevant at Milestone 2 (install modules) and Milestone 7 (ISO).
+**Resolution:** Yes. `zram-generator` installed via pacman in M7 (02-base.sh).
+Config at `default/zram/zram-generator.conf`: zram0 at 50% RAM, zstd compression.
+zram-generator activates via systemd generator on boot — no explicit service enable
+needed. Deployed to `/etc/systemd/zram-generator.conf` during install.
 
 ---
 
-## OQ-002: Bluetooth support
+## OQ-002: Bluetooth support — RESOLVED (M2)
 
-**Question:** Should Bluetooth (bluez + bluetui) be in the default install?
+**Question:** Should Bluetooth be in the default install?
 
-**Why it matters:** Many target machines (Intel i3/i5 laptops) have Bluetooth hardware.
-Without `bluez`, audio headphones and mice won't pair. But it adds ~15 MB idle.
-
-**Conservative pick if needed:** Include `bluez` and `bluez-utils` in default. Enable
-`bluetooth.service`. Do not include a heavy GUI (omarchy uses bluetui for TUI access).
-
-**Milestone:** Milestone 1 package list, Milestone 2 services.
+**Resolution:** Yes — conservative pick implemented. `bluez` + `bluez-utils` included
+in `install/packaging/05-network.sh`. `bluetooth.service` enabled in post-install.
+No Bluetooth GUI ships in core; use `bluetoothctl` for pairing.
 
 ---
 
-## OQ-003: Login manager upgrade path
+## OQ-003: Login manager upgrade path — DEFERRED (v0.2)
 
-**Question:** Decision 001 chose PAM autologin for v1. When should we add greetd?
+**Question:** When should we add greetd?
 
-**Why it matters:** greetd gives us a lock screen integration point and multi-user support.
-Without it, `swaylock` is the only security layer (which is fine for single-user).
+**Resolution:** Not in v0.1. PAM autologin via getty@tty1 override remains the
+approach for the initial release (Decision 001). greetd + tuigreet is the planned
+upgrade: disable the getty override, enable `greetd.service`, configure a tuigreet
+session pointing at sway. The work is one migration script.
 
-**Current answer:** Autologin for v1. Revisit before v0.2.
-
-**Milestone:** Milestone 8 (polish) or a dedicated future milestone.
-
----
-
-## OQ-004: Font licensing audit
-
-**Question:** `ttf-paratype` (AUR) installs PT Sans + PT Mono. Are these OFL-licensed?
-
-**Why it matters:** If we bundle fonts in the ISO, the license must be compatible with
-our Apache 2.0 repo license.
-
-**Known:** PT Sans and PT Mono are ParaType fonts released under the OFL (SIL Open Font
-License). This is compatible. Needs confirmation when the AUR package is inspected.
-
-**Milestone:** Milestone 5 (fonts stage) and Milestone 7 (ISO).
+**Tracked:** See `migrations/` — a future 001-greetd.sh will handle this.
 
 ---
 
-## OQ-005: File manager
+## OQ-004: Font licensing audit — RESOLVED (M7)
 
-**Question:** Include `thunar` (XFCE file manager, ~20 MB) or ship CLI-only?
+**Question:** Are PT Sans + PT Mono OFL-licensed and compatible with Apache 2.0?
 
-**CLAUDE.md says:** Nothing explicit on file managers. README says nothing.
-
-**Conservative pick:** Ship nothing in core. Users add thunar or nautilus themselves.
-`eza`, `fd`, and `fzf` cover most CLI use cases. Document recommended optional installs.
-
-**Milestone:** Milestone 1 (package list already excludes it), Milestone 8 (docs).
+**Resolution:** Yes. PT Sans and PT Mono are released by ParaType under the SIL Open
+Font License (OFL 1.1). OFL is permissive and compatible with Apache 2.0. Font bundles
+in the ISO are fine. `ttf-bebas-neue` (AUR) is also OFL. `inter-font` is OFL.
+`ttf-jetbrains-mono` is OFL. All four AUR fonts are clear.
 
 ---
 
-## OQ-006: Heavy browser + 800 MB RAM target
+## OQ-005: File manager — RESOLVED (M8)
 
-**Question:** If Firefox (~400 MB) + idle system (~365 MB) = ~765 MB, what happens with
-multiple tabs or other open apps?
+**Question:** Include thunar or ship CLI-only?
 
-**Answer:** Users on 4 GB hardware will hit the limit with a browser + a second app.
-`zram` (OQ-001) is the mitigation. The 800 MB target is for idle only; active use is
-expected to exceed it temporarily.
-
-**Document in:** README.md "System Requirements" section.
-
-**Milestone:** Milestone 8 (docs).
+**Resolution:** CLI-only in core. `eza`, `fd`, and `fzf` cover the common cases.
+`bin/akula-install-file-manager` ships as an opt-in script that installs Thunar
+(~20 MB idle) and sets it as the default via `xdg-mime`.
 
 ---
 
-## OQ-007: Wayland screen sharing
+## OQ-006: Heavy browser + 800 MB RAM target — RESOLVED (M8)
 
-**Question:** `xdg-desktop-portal-wlr` enables screen sharing for wlroots compositors.
-Does it work with Firefox/WebRTC screen sharing on Sway?
+**Question:** What happens when Firefox (~400 MB) + idle system (~365 MB) pushes past
+800 MB with multiple tabs?
 
-**Answer (best current knowledge):** Yes, with `pipewire` and `wireplumber` running.
-Firefox on Wayland uses the portal. May require `MOZ_ENABLE_WAYLAND=1` env var.
+**Resolution:** Documented in README System Requirements section. The 800 MB target
+is for the idle system only — active use is expected to exceed it temporarily.
+zram (OQ-001) provides compressed swap as a buffer before the OOM killer fires.
+Firefox is opt-in via `bin/akula-install-browser`; users on 4 GB hardware know what
+they're trading when they install it.
 
-**Action:** Test this in the Milestone 6 VM test. Log result here.
+---
 
-**Milestone:** Milestone 6 (VM test).
+## OQ-007: Wayland screen sharing — RESOLVED (M3 / M5)
+
+**Question:** Does xdg-desktop-portal-wlr enable WebRTC screen sharing in Firefox on Sway?
+
+**Resolution:** Yes. `xdg-desktop-portal-wlr` (installed in M2, 03-sway.sh) provides
+the PipeWire screen capture backend for wlroots compositors. Firefox uses the portal
+automatically when `MOZ_ENABLE_WAYLAND=1` is set — which is in `/etc/environment`
+since M3 (install/config/all.sh). PipeWire + WirePlumber are installed and enabled as
+user services (M2). No additional configuration needed.
