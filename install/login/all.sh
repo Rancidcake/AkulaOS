@@ -17,19 +17,4 @@ EOF
 
 ok "Autologin configured"
 
-# ── Auto-start Sway on TTY1 login ────────────────────────────────────────────
-
-info "Sway autostart in ~/.bash_profile"
-
-# Only append if not already present (installer is safe to re-run)
-if ! grep -q 'exec sway' "$HOME/.bash_profile" 2>/dev/null; then
-    cat >> "$HOME/.bash_profile" << 'EOF'
-
-# AkulaOS: start Sway on first TTY login
-if [[ -z "${DISPLAY:-}" ]] && [[ "$(tty)" = "/dev/tty1" ]]; then
-    exec sway
-fi
-EOF
-fi
-
-ok "Sway autostart configured"
+# Sway autostart is handled by default/bash/bash_profile deployed in install/config.

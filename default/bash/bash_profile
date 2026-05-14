@@ -1,0 +1,20 @@
+# AkulaOS .bash_profile — sourced once for login shells (TTY, SSH).
+
+# Source .bashrc so interactive config is available in login shells too
+[[ -f ~/.bashrc ]] && source ~/.bashrc
+
+# PATH — login shells don't inherit the .bashrc PATH additions
+[[ ":$PATH:" == *":$HOME/.local/bin:"* ]] \
+    || export PATH="$HOME/.local/bin:$PATH"
+
+# XDG base directories — set explicitly so any app that checks them gets
+# predictable paths regardless of whether the session is Wayland or TTY
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+
+# Start Sway automatically on TTY1 login
+if [[ -z "${DISPLAY:-}" ]] && [[ "$(tty)" = "/dev/tty1" ]]; then
+    exec sway
+fi

@@ -1,0 +1,69 @@
+# AkulaOS .bashrc — sourced for every interactive shell.
+
+# ── Early exit for non-interactive shells ─────────────────────────────────────
+[[ $- == *i* ]] || return
+
+# ── History ───────────────────────────────────────────────────────────────────
+
+HISTSIZE=10000
+HISTFILESIZE=20000
+HISTCONTROL=ignoreboth    # drop duplicate and space-prefixed commands
+shopt -s histappend       # append rather than overwrite on exit
+
+# ── Shell options ─────────────────────────────────────────────────────────────
+
+shopt -s checkwinsize     # update LINES/COLUMNS after each command
+shopt -s globstar         # ** matches across directory boundaries
+shopt -s autocd           # bare dir name → cd into it
+
+# ── PATH ──────────────────────────────────────────────────────────────────────
+
+[[ ":$PATH:" == *":$HOME/.local/bin:"* ]] \
+    || export PATH="$HOME/.local/bin:$PATH"
+
+# ── Tool environment ──────────────────────────────────────────────────────────
+
+# bat: use the terminal's own 16-color palette so syntax colors match foot.ini
+export BAT_THEME="ansi"
+
+# bat as man pager — col strips backspace-based groff formatting before bat sees it
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
+
+# fzf: fd as the file finder (respects .gitignore, faster than find)
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+
+# fzf colors — full AkulaOS palette, no new colors invented
+export FZF_DEFAULT_OPTS="\
+  --color=bg:#1A1A1A,bg+:#2B2D33 \
+  --color=fg:#8A8A82,fg+:#E8E2D0 \
+  --color=hl:#C41E1E,hl+:#C41E1E \
+  --color=border:#4A4A4A,prompt:#C41E1E \
+  --color=pointer:#C41E1E,marker:#C41E1E \
+  --color=info:#8A8A82 \
+  --border=sharp"
+
+# ── Aliases ───────────────────────────────────────────────────────────────────
+
+alias ls='eza --group-directories-first'
+alias ll='eza -lh  --group-directories-first --git'
+alias la='eza -lah --group-directories-first --git'
+alias lt='eza --tree --level=2'
+alias cat='bat --style=plain'
+
+# ── Tool initialization ───────────────────────────────────────────────────────
+
+# Starship prompt — must come before zoxide so the prompt reflects the final $PWD
+eval "$(starship init bash)"
+
+# Zoxide — replaces cd with frecency-aware navigation; cdi for interactive picker
+eval "$(zoxide init bash --cmd cd)"
+
+# fzf keybindings: Ctrl+R (history), Ctrl+T (files), Alt+C (dirs)
+[[ -r /usr/share/fzf/key-bindings.bash ]] \
+    && source /usr/share/fzf/key-bindings.bash
+[[ -r /usr/share/fzf/completion.bash ]] \
+    && source /usr/share/fzf/completion.bash
+
+# mise — runtime version manager; only activates if the user has set it up
+command -v mise &>/dev/null && eval "$(mise activate bash)"
