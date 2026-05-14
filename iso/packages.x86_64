@@ -1,0 +1,50 @@
+# AkulaOS live ISO package list
+# These packages are installed into the squashfs live filesystem.
+# The installer (install.sh) installs its own package set onto the target disk.
+
+# archiso live-boot hooks — required for squashfs root to work
+archiso
+
+# Base system
+base
+linux
+linux-firmware
+
+# Arch installation utilities
+arch-install-scripts
+
+# Disk tools
+btrfs-progs
+dosfstools
+efibootmgr
+gptfdisk
+parted
+
+# Bootloader (installed onto the target system by install.sh, also useful in live env)
+grub
+
+# Network
+networkmanager
+wpa_supplicant
+wireless-regdb
+
+# Development tools (needed because install.sh builds yay from AUR)
+base-devel
+git
+
+# Remote access
+openssh
+
+# Console utilities
+curl
+htop
+man-db
+nano
+terminus-font
+tmux
+vim
+wget
+
+# Hardware detection
+pciutils
+usbutils

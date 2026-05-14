@@ -1,0 +1,11 @@
+
+════════════════════════════════════════════
+
+  А К У Л А  О С  ·  Installer
+
+  1. Connect to wifi    →  nmtui
+  2. Partition disk     →  lsblk  then  cgdisk /dev/sdX
+  3. Full guide         →  cat /root/INSTALL.txt
+
+════════════════════════════════════════════
+

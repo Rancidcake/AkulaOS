@@ -1,0 +1,99 @@
+AkulaOS Installation Guide
+════════════════════════════════════════════
+
+BEFORE YOU START
+  Single-disk UEFI install assumed. For BIOS systems, skip the EFI
+  partition and adjust the grub-install step accordingly.
+
+── STEP 1  CONNECT TO WIFI ──────────────────────────────────────────
+
+  nmtui
+
+  (If using ethernet, you are already connected.)
+
+── STEP 2  IDENTIFY YOUR DISK ───────────────────────────────────────
+
+  lsblk
+
+  Note the disk name — usually /dev/sda (SSD/HDD) or /dev/nvme0n1
+  (NVMe). Do NOT use the partition name (sda1, nvme0n1p1).
+
+── STEP 3  PARTITION THE DISK ───────────────────────────────────────
+
+  cgdisk /dev/sdX          (replace sdX with your disk)
+
+  Recommended layout for UEFI:
+    Size 512M   Type EF00   Label EFI
+    Size REST   Type 8300   Label ROOT
+
+  For BIOS: one partition, type 8300, entire disk.
+
+── STEP 4  FORMAT ───────────────────────────────────────────────────
+
+  UEFI:
+    mkfs.fat  -F32 -n EFI  /dev/sdX1
+    mkfs.btrfs     -L ROOT /dev/sdX2
+
+  BIOS:
+    mkfs.btrfs -L ROOT /dev/sdX1
+
+── STEP 5  MOUNT ────────────────────────────────────────────────────
+
+  UEFI:
+    mount /dev/sdX2 /mnt
+    mount --mkdir /dev/sdX1 /mnt/boot/efi
+
+  BIOS:
+    mount /dev/sdX1 /mnt
+
+── STEP 6  INSTALL ARCH BASE ────────────────────────────────────────
+
+  pacstrap /mnt base linux linux-firmware base-devel git
+
+── STEP 7  FSTAB ────────────────────────────────────────────────────
+
+  genfstab -U /mnt >> /mnt/etc/fstab
+  cat /mnt/etc/fstab          (verify it looks right)
+
+── STEP 8  CONFIGURE INSIDE CHROOT ──────────────────────────────────
+
+  arch-chroot /mnt
+
+  # Timezone
+  ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
+  hwclock --systohc
+
+  # Locale — uncomment your locale in /etc/locale.gen, then:
+  locale-gen
+  echo "LANG=en_US.UTF-8" > /etc/locale.conf
+
+  # Hostname
+  echo "yourhostname" > /etc/hostname
+
+  # Root password
+  passwd
+
+  # User account (replace 'youruser')
+  useradd -m -G wheel youruser
+  passwd youruser
+  EDITOR=nano visudo        # uncomment:  %wheel ALL=(ALL:ALL) ALL
+
+── STEP 9  RUN AKULAOS INSTALLER ────────────────────────────────────
+
+  # Still inside the chroot, switch to your new user:
+  su - youruser
+
+  git clone https://github.com/Rancidcake/AkulaOS.git
+  cd AkulaOS
+  bash install.sh
+
+── STEP 10  REBOOT ──────────────────────────────────────────────────
+
+  exit           # exit su
+  exit           # exit arch-chroot
+  umount -R /mnt
+  reboot
+
+  Remove the USB drive when the screen goes blank.
+
+════════════════════════════════════════════

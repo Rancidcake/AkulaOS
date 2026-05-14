@@ -8,6 +8,7 @@ pkg_install \
     dosfstools btrfs-progs exfatprogs \
     polkit polkit-gnome gnome-keyring libsecret \
     kernel-modules-hook \
+    zram-generator \
     base-devel git expac gum \
     man-db bash-completion \
     less jq unzip socat inetutils whois

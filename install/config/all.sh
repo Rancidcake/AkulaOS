@@ -79,6 +79,10 @@ install -Dm 644 "$_DEF/fontconfig/fonts.conf"        "$HOME/.config/fontconfig/f
 install -Dm 644 "$_DEF/gtk-3.0/settings.ini"         "$HOME/.config/gtk-3.0/settings.ini"
 install -Dm 644 "$_DEF/gtk-4.0/settings.ini"         "$HOME/.config/gtk-4.0/settings.ini"
 
+# zram: system-level config; zram-generator activates it via systemd on boot
+sudo install -Dm 644 "$_AKULA_DIR/default/zram/zram-generator.conf" \
+    /etc/systemd/zram-generator.conf
+
 ok "Configs deployed"
 
 # ── bin/ scripts → ~/.local/bin ───────────────────────────────────────────────
