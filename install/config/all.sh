@@ -72,7 +72,10 @@ install -Dm 644 "$_DEF/wofi/config"               "$HOME/.config/wofi/config"
 install -Dm 644 "$_DEF/wofi/style.css"            "$HOME/.config/wofi/style.css"
 install -Dm 644 "$_DEF/starship/starship.toml"    "$HOME/.config/starship.toml"
 install -Dm 644 "$_DEF/akula/palette.sh"          "$HOME/.config/akula/palette.sh"
-install -Dm 644 "$_DEF/swaylock/config"           "$HOME/.config/swaylock/config"
+install -Dm 644 "$_DEF/swaylock/config"              "$HOME/.config/swaylock/config"
+install -Dm 644 "$_DEF/fontconfig/fonts.conf"        "$HOME/.config/fontconfig/fonts.conf"
+install -Dm 644 "$_DEF/gtk-3.0/settings.ini"         "$HOME/.config/gtk-3.0/settings.ini"
+install -Dm 644 "$_DEF/gtk-4.0/settings.ini"         "$HOME/.config/gtk-4.0/settings.ini"
 
 ok "Configs deployed"
 

@@ -1,0 +1,18 @@
+#!/bin/bash
+# Install Firefox as the default browser.
+# Browser is deliberately not in the core install — see docs/decisions/007-browser.md.
+# RAM budget note: Firefox adds ~400 MB RSS to the ~365 MB idle figure.
+
+set -euo pipefail
+
+echo "Installing Firefox (~400 MB RSS when active)..."
+sudo pacman -S --needed --noconfirm firefox
+
+xdg-mime default firefox.desktop x-scheme-handler/http
+xdg-mime default firefox.desktop x-scheme-handler/https
+xdg-mime default firefox.desktop text/html
+
+echo ""
+echo "Firefox installed."
+echo "MOZ_ENABLE_WAYLAND=1 is already set in /etc/environment — no extra config needed."
+echo "Launch with: firefox"
