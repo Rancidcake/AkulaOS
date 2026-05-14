@@ -10,10 +10,8 @@ iso_version="0.1.0"
 install_dir="arch"
 buildmodes=('iso')
 bootmodes=(
-    'bios.syslinux.mbr'
-    'bios.syslinux.eltorito'
-    'uefi-ia32.grub.esp'
-    'uefi-x64.grub.esp'
+    'bios.syslinux'
+    'uefi.grub'
 )
 arch="x86_64"
 pacman_conf="pacman.conf"

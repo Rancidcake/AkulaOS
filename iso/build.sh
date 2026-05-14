@@ -10,8 +10,7 @@ OUT="$SCRIPT_DIR/../build/iso"
 [[ $EUID -eq 0 ]] \
     || { echo "Run as root: sudo bash iso/build.sh"; exit 1; }
 
-command -v mkarchiso &>/dev/null \
-    || pacman -S --needed --noconfirm archiso
+pacman -S --needed --noconfirm archiso grub
 
 mkdir -p "$OUT"
 mkarchiso -v -o "$OUT" "$SCRIPT_DIR"

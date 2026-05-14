@@ -5,6 +5,9 @@
 # archiso live-boot hooks — required for squashfs root to work
 archiso
 
+# BIOS boot support
+syslinux
+
 # Base system
 base
 linux
